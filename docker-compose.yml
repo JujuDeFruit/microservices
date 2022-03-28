@@ -1,0 +1,10 @@
+version: '3.6'
+
+services:
+  serveur1:
+    build:
+      context: ./api/serveur1
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
