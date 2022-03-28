@@ -8,3 +8,11 @@ services:
       - 8080:8080
     expose:
       - 8080
+
+  client:
+    build:
+      context: ./app
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
