@@ -53,7 +53,13 @@ public class CVController {
                 .stream().filter(d -> Objects.equals(d.get("id"), cvHeader.getId()))
                 .findFirst();
 
-        if (!headerOpt.isPresent()) throw new Exception();
+        if (!headerOpt.isPresent()) {
+            FirestoreClient
+                    .getFirestore()
+                    .collection("header")
+                    .add(cvHeader);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
 
         final DocumentReference docRef = headerOpt.get().getReference();
 

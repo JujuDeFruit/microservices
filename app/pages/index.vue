@@ -13,7 +13,7 @@
                 <v-input label="Nom" />
               </v-col>
               <v-col cols="8">
-                <v-input :label="header.nom" />
+                <v-input v-if="header.nom" :label="header.nom" />
               </v-col>
             </v-row>
 
@@ -22,7 +22,7 @@
                 <v-input label="Prénom" />
               </v-col>
               <v-col cols="8">
-                <v-input :label="header.prenom" />
+                <v-input v-if="header.prenom" :label="header.prenom" />
               </v-col>
             </v-row>
 
@@ -31,7 +31,7 @@
                 <v-input label="Adresse" />
               </v-col>
               <v-col cols="8">
-                <v-input :label="adresse" />
+                <v-input v-if="header.adresse" :label="adresse" />
               </v-col>
             </v-row>
 
@@ -40,7 +40,7 @@
                 <v-input label="Ville" />
               </v-col>
               <v-col cols="8">
-                <v-input :label="ville" />
+                <v-input v-if="header.adresse" :label="ville" />
               </v-col>
             </v-row>
 
@@ -49,7 +49,7 @@
                 <v-input label="Code postal" />
               </v-col>
               <v-col cols="8">
-                <v-input :label="codePostal" />
+                <v-input v-if="header.adresse" :label="codePostal" />
               </v-col>
             </v-row>
 
@@ -58,7 +58,7 @@
                 <v-input label="Email" />
               </v-col>
               <v-col cols="8">
-                <v-input :label="header.email" />
+                <v-input v-if="header.email" :label="header.email" />
               </v-col>
             </v-row>
 
@@ -67,7 +67,7 @@
                 <v-input label="Téléphone" />
               </v-col>
               <v-col cols="8">
-                <v-input :label="header.tel" />
+                <v-input v-if="header.tel" :label="header.tel" />
               </v-col>
             </v-row>
 
@@ -223,6 +223,7 @@ export default {
     } catch (e) {
       alert(e.message)
     }
+
     return { header: header.data }
   },
   data() {
@@ -246,13 +247,13 @@ export default {
   },
   computed: {
     adresse() {
-      return this.header.adresse.split('/').at(0).trim()
+      return this.header && this.header.adresse ? this.header.adresse.split('/').at(0).trim() : ""
     },
     ville() {
-      return this.header.adresse.split('/').at(1).trim()
+      return this.header && this.header.adresse ? this.header.adresse.split('/').at(1).trim() : ""
     },
     codePostal() {
-      return this.header.adresse.split('/').at(-1).trim()
+      return this.header && this.header.adresse ? this.header.adresse.split('/').at(-1).trim() : ""
     }
   },
   methods: {
@@ -263,10 +264,13 @@ export default {
     },
     preModification() {
       // Copy data to temp variable
-      this.data = { ...this.header }
-      this.data.adresse = this.adresse
-      this.data.ville = this.ville
-      this.data.codePostal = this.codePostal
+      this.data.nom = this.header.nom ?? ""
+      this.data.prenom = this.header.prenom ?? ""
+      this.data.email = this.header.email ?? ""
+      this.data.tel = this.header.tel ?? ""
+      this.data.adresse = this.adresse ?? ""
+      this.data.ville = this.ville ?? ""
+      this.data.codePostal = this.codePostal ?? ""
       this.isEdit = true
     },
     async modifier() {

@@ -58,7 +58,7 @@ public class AuthController {
                 .get()
                 .getDocuments();
 
-        final Optional<QueryDocumentSnapshot> userOpt = users.stream().filter(u -> u.get("email").equals(credentials.getEmail())).findFirst();
+        final Optional<QueryDocumentSnapshot> userOpt = users.stream().filter(u -> Objects.equals(u.get("email"), credentials.getEmail())).findFirst();
 
         if(userOpt.isPresent()) throw new Exception("L'utilisateur existe déjà !");
 
