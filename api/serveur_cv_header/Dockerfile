@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 FROM openjdk:17-alpine
-ENV API=/api/serveur2
+ENV API=/api
 
 WORKDIR $API
 

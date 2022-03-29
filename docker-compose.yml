@@ -1,11 +1,19 @@
 version: '3.6'
 
 services:
-  serveur1:
+  serveur_auth:
     build:
-      context: ./api/serveur1
+      context: ./api/serveur_auth
     ports:
       - 8080:8080
+    expose:
+      - 8080
+    
+  serveur_cv_header:
+    build:
+      context: ./api/serveur_cv_header
+    ports:
+      - 8081:8080
     expose:
       - 8080
 
