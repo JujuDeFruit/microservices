@@ -33,7 +33,11 @@ public class CVController {
                 .stream().filter(d -> Objects.equals(d.get("id"), id))
                 .findFirst();
 
-        if (!headerOpt.isPresent()) throw new Exception();
+        if (!headerOpt.isPresent()) {
+            CVHeader cvHeader = new CVHeader();
+            cvHeader.setId(id);
+            return ResponseEntity.ok(cvHeader);
+        }
 
         return ResponseEntity.ok(headerOpt.get().toObject(CVHeader.class));
     }

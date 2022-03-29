@@ -11,10 +11,10 @@ WORKDIR $APP
 # update and install dependency
 RUN apk update && apk upgrade
 
-# copy the app, note .dockerignore
 COPY . $APP
+
 RUN npm install
-RUN npm run build
+RUN npm run generate
 
 EXPOSE 3000
 
