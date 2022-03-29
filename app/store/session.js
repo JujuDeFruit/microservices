@@ -33,7 +33,7 @@ export const actions = {
     try {
       const res = await this.$axios.post(MICRO_AUTH.concat('/authentication/register'), {...user})
       if (res.status === 200) {
-        commit('connexion', user)
+        commit('connexion', res.data)
         await this.$router.push('/')
       }
     } catch (e) {
