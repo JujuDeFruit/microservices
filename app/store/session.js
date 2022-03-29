@@ -1,11 +1,13 @@
-const MICRO_AUTH = 'http://localhost:8080/api'
+import {MICRO_AUTH} from "@/constant/api";
 
 export const state = () => ({
   user: null
 })
 
 export const getters = {
-  isAuth: state => state.user !== null
+  isAuth: state => state.user !== null,
+  getId: state => state.user.id,
+  getUser: state => state.user
 }
 
 export const mutations = {
@@ -27,4 +29,17 @@ export const actions = {
     } else if(res.status === 204) throw new Error("Le mot de passe et l'email ne correspondent pas")
     else throw new Error("Erreur inconnue")
   },
+  async inscription({ state, commit }, user) {
+    try {
+      const res = await this.$axios.post(MICRO_AUTH.concat('/authentication/register'), {...user})
+      if (res.status === 200) {
+        commit('connexion', user)
+        await this.$router.push('/')
+      }
+    } catch (e) {
+      if (e.message.includes('409')) {
+        throw new Error("L'email est déjà associé à un compte")
+      } else throw new Error("Erreur inconnue")
+    }
+  }
 }

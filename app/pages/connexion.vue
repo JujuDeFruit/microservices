@@ -42,6 +42,14 @@
 
         <v-card-actions>
 
+          <v-btn color="primary" elevation="2" outlined rounded @click="$router.push('/inscription')">
+            <v-icon left>
+              mdi-pencil
+            </v-icon>
+            Inscription
+          </v-btn>
+
+
           <v-spacer />
 
           <v-btn color="primary" rounded elevation="2" @click="submit">
@@ -66,7 +74,7 @@ export default {
       password: '',
       email: '',
       rules: {
-        required: (value) => !!value || 'Ce champ est equis',
+        required: (value) => !!value || 'Ce champ est requis',
         min: (v) => v.length >= 8 || 'Minimum 8 caractères',
         emailFormat: (v) => this.emailMatchFormat(v) || "L'e-mail n'est pas au bon format"
       },

@@ -19,15 +19,6 @@
             </v-icon>
             Connexion
           </v-btn>
-
-          <v-spacer />
-
-          <v-btn color="primary" rounded elevation="2" @click="$router.push('/')">
-            <v-icon left>
-              mdi-home
-            </v-icon>
-            Accueil
-          </v-btn>
         </v-card-actions>
 
       </v-card>
