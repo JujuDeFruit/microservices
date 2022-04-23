@@ -19,7 +19,7 @@
 
             <v-row>
               <v-col cols="4">
-                <v-input label="Prénom" />
+                <v-input label="Prénommm" />
               </v-col>
               <v-col cols="8">
                 <v-input v-if="header.prenom" :label="header.prenom" />
@@ -68,6 +68,15 @@
               </v-col>
               <v-col cols="8">
                 <v-input v-if="header.tel" :label="header.tel" />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="4">
+                <v-input label="Information" />
+              </v-col>
+              <v-col cols="8">
+                <v-input v-if="header.info" :label="header.info" />
               </v-col>
             </v-row>
 
