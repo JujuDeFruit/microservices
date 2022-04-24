@@ -19,7 +19,7 @@
 
             <v-row>
               <v-col cols="4">
-                <v-input label="Prénommm" />
+                <v-input label="Prénom" />
               </v-col>
               <v-col cols="8">
                 <v-input v-if="header.prenom" :label="header.prenom" />
