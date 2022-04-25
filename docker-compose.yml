@@ -25,6 +25,15 @@ services:
     expose:
       - 8080
 
+  serveur_cv_competences:
+    build:
+      context: ./api/serveur_cv_competences
+    ports:
+      - 8083:8080
+    expose:
+      - 8080
+
+
   # client:
   #   build:
   #     context: ./app
