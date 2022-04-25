@@ -10,112 +10,75 @@
 
                 <v-spacer></v-spacer>
 
-                 <v-card-text>
+                <v-card-text>
 
-                    <v-row>
-                    <v-col cols="2">
-                        <v-input label="Compétence 1" />
-                    </v-col>
-                    <v-col cols="3">
-                        <v-icon>mdi-chevron-right</v-icon>
-                    </v-col>
-                    <v-col cols="4">
-                        niveau expert
-                    </v-col>
+                    <v-row v-for="(array_competence,k) in competence.competence" :key="k">
+                        <v-col cols="4">
+                            <v-input :label="array_competence.split('/')[0].trim()" />
+                        </v-col>
+                        <v-col cols="3">
+                            <v-icon>mdi-chevron-right</v-icon>
+                        </v-col>
+                        <v-col cols="4">
+                            {{array_competence.split('/')[1].trim()}}
+                        </v-col>
                     </v-row>
-
-                    <v-row>
-                    <v-col cols="2">
-                        <v-input label="Compétence 2" />
-                    </v-col>
-                    <v-col cols="3">
-                        <v-icon>mdi-chevron-right</v-icon>
-                    </v-col>
-                    <v-col cols="4">
-                        niveau intermediaire
-                    </v-col>
-                    </v-row>
-
                 </v-card-text>
 
                 <v-card-actions>
                     <v-spacer />
-                    <v-btn color="success" @click.stop="preModification">
-                    <v-icon left>mdi-pencil</v-icon>
-                    Modifier
+                    <v-btn color="error" rounded @click.stop="preModification">
+                        <v-icon left>mdi-pencil</v-icon>
+                        Modifier
                     </v-btn>
                 </v-card-actions>
             </v-card>
 
             <v-card v-if=isEdit class="mx-auto" max-width="1000">
-                <v-card-title>
-                    Mes Compétences
-                </v-card-title>
+                <v-form ref="form">
+                    <v-card-title>
+                        Mes Compétences
+                    </v-card-title>
 
-                <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
 
-                 <v-card-text>
+                    <v-card-text>
 
-                    <v-row>
-                        <v-col cols="2">
-                            <v-text-field
-                                class="pt-0 mt-0"
-                                label="Compétence1"
-                            />
-                        </v-col>
-                        <v-col cols="3">
-                            <v-icon>mdi-chevron-right</v-icon>
-                        </v-col>
-                        <v-col cols="4">
-                        <v-text-field
-                            class="pt-0 mt-0"
-                            label="niveau"
-                        />
-                        </v-col>
-                    </v-row>
+                        <v-row v-for="(array_competence,k) in data.temp_competence" :key="k">
+                            <v-col cols="4">
+                                <v-text-field v-model="data.temp_competence[k][0]" :rules="[rules.required]" label="Titre de la compétence" dense />
+                            </v-col>
+                            <v-col cols="1">
+                                <v-icon>mdi-chevron-right</v-icon>
+                            </v-col>
+                            <v-col cols="4">
+                                <v-text-field v-model="data.temp_competence[k][1]" :rules="[rules.required]" label="Niveau de la compétence" dense></v-text-field>
+                            </v-col>
+                            <v-col cols="1">
+                                <v-btn color="primary" depressed @click="deleteRow(k,data.temp_competence[k])">
+                                    <v-icon left>mdi-delete</v-icon>Supprimer
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
 
-                    <v-row>
-                        <v-col cols="2">
-                            <v-text-field
-                                class="pt-0 mt-0"
-                                label="Compétence2"
-                            />
-                        </v-col>
-                        <v-col cols="3">
-                            <v-icon>mdi-chevron-right</v-icon>
-                        </v-col>
-                        <v-col cols="4">
-                        <v-text-field
-                            class="pt-0 mt-0"
-                            label="niveau"
-                        />
-                        </v-col>
-                    </v-row>
-
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    color="indigo"
-                    @click.stop="addElem"
-                    >
-                        <v-icon dark>
-                            mdi-plus
-                        </v-icon>
-                    </v-btn>
-                    <v-spacer />
-                    <v-btn color="success" @click.stop="modifier">
-                    <v-icon left>mdi-check-bold</v-icon>
-                    Enregistrer
-                    </v-btn>
-                    <v-btn color="error" @click.stop="isEdit = false">
-                    <v-icon left>mdi-close</v-icon>
-                    Annuler
-                    </v-btn>
-                </v-card-actions>
+                    <v-card-actions>
+                        <v-btn class="mx-2" fab dark color="indigo" @click.stop="addElem">
+                            <v-icon dark>
+                                mdi-plus
+                            </v-icon>
+                        </v-btn>
+                        <v-spacer />
+                        <v-btn color="success" @click.stop="modifier">
+                            <v-icon left>mdi-check-bold</v-icon>
+                            Enregistrer
+                        </v-btn>
+                        <v-btn color="error" @click.stop="isEdit = false">
+                            <v-icon left>mdi-close</v-icon>
+                            Annuler
+                        </v-btn>
+                    </v-card-actions>
+                </v-form>
             </v-card>
         </v-col>
     </v-row>
@@ -124,15 +87,15 @@
 
 <script>
 import {
-    MICRO_EXPERIENCE
+    MICRO_COMPETENCES
 } from "@/constant/api";
 
 export default {
     middleware: 'auth',
     async asyncData(ctx) {
-        let experience = {}
+        let competence = {}
         try {
-            experience = await ctx.$axios.get(MICRO_EXPERIENCE.concat('/cv/experience'), {
+            competence = await ctx.$axios.get(MICRO_COMPETENCES.concat('/cv/competences'), {
                 params: {
                     id: ctx.store.getters["session/getId"]
                 }
@@ -140,27 +103,62 @@ export default {
         } catch (e) {
             alert(e.message)
         }
-        console.log(experience)
-        console.log(experience.data)
+        console.log(competence)
+        console.log(competence.data)
         return {
-            experience: experience.data
+            competence: competence.data
         }
     },
     data: () => ({
         show: false,
         isEdit: false,
         data: {
-
+            temp_competence: []
+        },
+        rules: {
+            required: (value) => !!value || 'Ce champ est requis',
         },
     }),
+
     methods: {
         preModification() {
+            this.data.temp_competence = []
+            if(this.competence.competence!=null)
+            this.competence.competence.forEach(competence => {
+                this.data.temp_competence.push([competence.split('/')[0].trim(), competence.split('/')[1].trim()])
+            });
             this.isEdit = true
         },
-        async modifier() {
-
+        addElem() {
+            this.data.temp_competence.push(["", ""])
         },
-        async addElem(){
+        deleteRow(index, competence) {
+            this.data.temp_competence.splice(index, 1)
+        },
+        async modifier() {
+            if (this.$refs.form.validate()) {
+                const tmp = {
+                }
+                tmp.competence=[]
+                tmp.id = this.$store.getters['session/getId']
+                console.log(tmp)
+                this.data.temp_competence.forEach(element => {
+                    tmp.competence.push(element[0].concat('/',element[1]))
+                });
+                console.log(tmp)
+                this.$nuxt.$emit('overlay', true)
+                try {
+                    await this.$axios.post(MICRO_COMPETENCES.concat('/cv/modifier'), {
+                        ...tmp
+                    })
+                    this.competence = tmp
+                } catch (e) {
+                    alert(e)
+                } finally {
+                    this.$nuxt.$emit('overlay', false)
+                    this.isEdit = false
+                }
+            }
 
         },
 

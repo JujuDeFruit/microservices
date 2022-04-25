@@ -3,124 +3,82 @@
     <v-row justify="right" align="right">
         <v-col cols="12">
 
-            <v-card v-if=!isEdit class="mx-auto" max-width="500">
+            <v-card v-if=!isEdit class="mx-auto" max-width="1000">
                 <v-card-title>
-                    {{experience.titre}}
+                    Formation Scolaire
                 </v-card-title>
 
                 <v-spacer></v-spacer>
 
-                <v-card-subtitle>
-                    <v-row>
-                        <v-col md="auto">
-                            <v-icon>mdi-calendar-blank</v-icon>
-                        </v-col>
-                        <v-col md="auto">
-                            <v-text-field v-model="experience.date1" readonly label="De" width="20" />
-                        </v-col>
-                        <v-col md="auto">
-                            <v-text-field v-model="experience.date2" readonly label="À" />
-                        </v-col>
-                    </v-row>
-                </v-card-subtitle>
+                <v-card-text>
 
-                <v-card-subtitle>
-                    <v-row>
-                        <v-col md="auto">
-                            <v-icon>mdi-map-marker</v-icon>
+                    <v-row v-for="(array_formation,k) in formation.formation" :key="k">
+                        <v-col cols="4">
+                            <v-input :label="array_formation.split('/')[0].trim()" />
                         </v-col>
-                        <v-col md="auto">
-                            {{experience.lieu}}
+                        <v-col cols="3">
+                            <v-icon>mdi-chevron-right</v-icon>
+                        </v-col>
+                        <v-col cols="4">
+                            {{array_formation.split('/')[1].trim()}}
                         </v-col>
                     </v-row>
-                </v-card-subtitle>
+                </v-card-text>
 
                 <v-card-actions>
+                    <v-spacer />
                     <v-btn color="error" rounded @click.stop="preModification">
                         <v-icon left>mdi-pencil</v-icon>
                         Modifier
                     </v-btn>
-
-                    <v-spacer></v-spacer>
-
-                    <v-btn text @click="show = !show">
-                        Détail
-                        <v-icon left>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                    </v-btn>
                 </v-card-actions>
-
-                <v-expand-transition>
-                    <div v-show="show">
-                        <v-divider></v-divider>
-
-                        <v-card-text>
-                            {{experience.detail}}
-                        </v-card-text>
-                    </div>
-                </v-expand-transition>
             </v-card>
 
-            <v-card v-if=isEdit class="mx-auto" max-width="500">
-                <v-card-title>
-                    <v-row>
-                        <v-col md="auto">
-                            <v-text-field v-model="data.titre" label="Titre"  />
-                        </v-col>
-                    </v-row>
-                </v-card-title>
-                <v-spacer></v-spacer>
-
-                <v-card-subtitle>
-                    <v-row>
-                        <v-col md="auto">
-                            <v-icon>mdi-calendar-blank</v-icon>
-                        </v-col>
-                        <v-col md="auto">
-                            <v-text-field v-model="data.date1" label="De" />
-                        </v-col>
-                        <v-col md="auto">
-                            <v-text-field v-model="data.date2" label="À" />
-                        </v-col>
-                    </v-row>
-                </v-card-subtitle>
-
-                <v-card-subtitle>
-                    <v-row>
-                        <v-col md="auto">
-                            <v-icon>mdi-map-marker</v-icon>
-                        </v-col>
-                        <v-col md="auto">
-                            <v-text-field v-model="data.lieu" label="lieu" dense />
-                        </v-col>
-                    </v-row>
-                </v-card-subtitle>
-
-                <v-card-actions>
-                    <v-btn color="error" rounded @click.stop="isEdit = false">
-                        Annuler
-                    </v-btn>
-                    <v-spacer />
-                    <v-btn color="success" rounded @click.stop="modifier">
-                        Valider les modifications
-                    </v-btn>
+            <v-card v-if=isEdit class="mx-auto" max-width="1000">
+                <v-form ref="form">
+                    <v-card-title>
+                        Formation Scolaire
+                    </v-card-title>
 
                     <v-spacer></v-spacer>
 
-                    <v-btn text @click="show = !show">
-                        Détail
-                        <v-icon left>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                    </v-btn>
-                </v-card-actions>
+                    <v-card-text>
 
-                <v-expand-transition>
-                    <div v-show="show">
-                        <v-divider></v-divider>
+                        <v-row v-for="(array_formation,k) in data.temp_formation" :key="k">
+                            <v-col cols="4">
+                                <v-text-field v-model="data.temp_formation[k][0]" :rules="[rules.required]" label="Titre du diplôme" dense />
+                            </v-col>
+                            <v-col cols="1">
+                                <v-icon>mdi-chevron-right</v-icon>
+                            </v-col>
+                            <v-col cols="4">
+                                <v-text-field v-model="data.temp_formation[k][1]" :rules="[rules.required]" label="Année d'obtention" dense></v-text-field>
+                            </v-col>
+                            <v-col cols="1">
+                                <v-btn color="primary" depressed @click="deleteRow(k,data.temp_formation[k])">
+                                    <v-icon left>mdi-delete</v-icon>Supprimer
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
 
-                        <v-card-text>
-                            <v-textarea v-model="data.detail" dense label="Detail de l'experience" />
-                        </v-card-text>
-                    </div>
-                </v-expand-transition>
+                    <v-card-actions>
+                        <v-btn class="mx-2" fab dark color="indigo" @click.stop="addElem">
+                            <v-icon dark>
+                                mdi-plus
+                            </v-icon>
+                        </v-btn>
+                        <v-spacer />
+                        <v-btn color="success" @click.stop="modifier">
+                            <v-icon left>mdi-check-bold</v-icon>
+                            Enregistrer
+                        </v-btn>
+                        <v-btn color="error" @click.stop="isEdit = false">
+                            <v-icon left>mdi-close</v-icon>
+                            Annuler
+                        </v-btn>
+                    </v-card-actions>
+                </v-form>
             </v-card>
         </v-col>
     </v-row>
@@ -129,15 +87,15 @@
 
 <script>
 import {
-    MICRO_EXPERIENCE
+    MICRO_FORMATIONS
 } from "@/constant/api";
 
 export default {
     middleware: 'auth',
     async asyncData(ctx) {
-        let experience = {}
+        let formation = {}
         try {
-            experience = await ctx.$axios.get(MICRO_EXPERIENCE.concat('/cv/experience'), {
+            formation = await ctx.$axios.get(MICRO_FORMATIONS.concat('/cv/formations'), {
                 params: {
                     id: ctx.store.getters["session/getId"]
                 }
@@ -145,50 +103,63 @@ export default {
         } catch (e) {
             alert(e.message)
         }
-        console.log(experience)
-        console.log(experience.data)
+        console.log(formation)
+        console.log(formation.data)
         return {
-            experience: experience.data
+            formation: formation.data
         }
     },
     data: () => ({
         show: false,
         isEdit: false,
         data: {
-            date1: "",
-            date2: "",
-            lieu: "",
-            titre: "",
-            detail: ""
+            temp_formation: []
+        },
+        rules: {
+            required: (value) => !!value || 'Ce champ est requis',
         },
     }),
+
     methods: {
         preModification() {
-            this.data.date1 = this.experience.date1 ?? ""
-            this.data.date2 = this.experience.date2 ?? ""
-            this.data.lieu = this.experience.lieu ?? ""
-            this.data.titre = this.experience.titre ?? ""
-            this.data.detail = this.experience.detail ?? ""
+            this.data.temp_formation = []
+            if(this.formation.formation!=null)
+                this.formation.formation.forEach(formation => {
+                    this.data.temp_formation.push([formation.split('/')[0].trim(), formation.split('/')[1].trim()])
+                });
             this.isEdit = true
         },
+        addElem() {
+            this.data.temp_formation.push(["", ""])
+        },
+        deleteRow(index, formation) {
+            this.data.temp_formation.splice(index, 1)
+        },
         async modifier() {
-            const tmp = {
-                ...this.data
+            if (this.$refs.form.validate()) {
+                const tmp = {
+                }
+                tmp.formation=[]
+                tmp.id = this.$store.getters['session/getId']
+                console.log(tmp)
+                this.data.temp_formation.forEach(element => {
+                    tmp.formation.push(element[0].concat('/',element[1]))
+                });
+                console.log(tmp)
+                this.$nuxt.$emit('overlay', true)
+                try {
+                    await this.$axios.post(MICRO_FORMATIONS.concat('/cv/modifier'), {
+                        ...tmp
+                    })
+                    this.formation = tmp
+                } catch (e) {
+                    alert(e)
+                } finally {
+                    this.$nuxt.$emit('overlay', false)
+                    this.isEdit = false
+                }
             }
-            tmp.id = this.$store.getters['session/getId']
-            this.$nuxt.$emit('overlay', true)
-            console.log(tmp)
-            try {
-                await this.$axios.post(MICRO_EXPERIENCE.concat('/cv/modifier'), {
-                    ...tmp
-                })
-                this.experience = tmp
-            } catch (e) {
-                alert(e)
-            } finally {
-                this.$nuxt.$emit('overlay', false)
-                this.isEdit = false
-            }
+
         },
 
     }

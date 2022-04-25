@@ -25,6 +25,14 @@ services:
     expose:
       - 8080
 
+  serveur_cv_formations:
+    build:
+      context: ./api/serveur_cv_formations
+    ports:
+      - 8083:8080
+    expose:
+      - 8080
+
   serveur_cv_competences:
     build:
       context: ./api/serveur_cv_competences
@@ -33,11 +41,10 @@ services:
     expose:
       - 8080
 
-
-  # client:
-  #   build:
-  #     context: ./app
-  #   ports:
-  #     - 3000:3000
-  #   expose:
-  #     - 3000
+  client:
+    build:
+      context: ./app
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
