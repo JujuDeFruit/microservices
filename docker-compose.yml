@@ -16,11 +16,19 @@ services:
       - 8081:8080
     expose:
       - 8080
-
-  client:
+      
+  serveur_cv_experience:
     build:
-      context: ./app
+      context: ./api/serveur_cv_experience
     ports:
-      - 3000:3000
+      - 8082:8080
     expose:
-      - 3000
+      - 8080
+
+  # client:
+  #   build:
+  #     context: ./app
+  #   ports:
+  #     - 3000:3000
+  #   expose:
+  #     - 3000
