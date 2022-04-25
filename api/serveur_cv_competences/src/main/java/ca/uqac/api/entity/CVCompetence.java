@@ -1,5 +1,6 @@
 package ca.uqac.api.entity;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,5 +11,5 @@ import lombok.ToString;
 public class CVCompetence {
 
     private String id;
-    private List<String> competence
+    private List<String> competence;
 }

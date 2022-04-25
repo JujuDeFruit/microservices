@@ -29,7 +29,7 @@ services:
     build:
       context: ./api/serveur_cv_competences
     ports:
-      - 8083:8080
+      - 8084:8080
     expose:
       - 8080
 
